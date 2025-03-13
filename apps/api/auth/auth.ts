@@ -5,7 +5,7 @@ import { SQLDatabase } from "encore.dev/storage/sqldb";
 import jwt from "jsonwebtoken";
 
 import { generateTokens } from "./lib";
-import { FindUserInput, UserOutput } from "./types";
+import { UserOutput } from "./types";
 import { SignInInput, SignUpInput } from "./validation";
 
 const db = new SQLDatabase("users", { migrations: "./migrations" });

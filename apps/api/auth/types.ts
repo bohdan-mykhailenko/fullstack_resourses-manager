@@ -1,5 +1,4 @@
 import { Header } from "encore.dev/api";
-import { MaxLen, MinLen } from "encore.dev/validate";
 
 export interface UserOutput {
   firstName: string;
