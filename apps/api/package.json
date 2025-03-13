@@ -1,0 +1,32 @@
+{
+  "name": "backend",
+  "private": true,
+  "version": "0.0.1",
+  "license": "MPL-2.0",
+  "type": "module",
+  "scripts": {
+    "test": "vitest"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.22.0",
+    "@trivago/prettier-plugin-sort-imports": "^5.2.2",
+    "@types/node": "^20.5.7",
+    "eslint": "^9.22.0",
+    "globals": "^16.0.0",
+    "typescript": "^5.2.2",
+    "typescript-eslint": "^8.26.1",
+    "vitest": "^2.1.4"
+  },
+  "dependencies": {
+    "@clerk/backend": "^1.25.2",
+    "@types/bcrypt": "^5.0.2",
+    "@types/jsonwebtoken": "^9.0.9",
+    "bcrypt": "^5.1.1",
+    "encore.dev": "^1.46.7",
+    "jsonwebtoken": "^9.0.2",
+    "prettier": "^3.5.3"
+  },
+  "optionalDependencies": {
+    "@rollup/rollup-linux-x64-gnu": "^4.13.0"
+  }
+}
