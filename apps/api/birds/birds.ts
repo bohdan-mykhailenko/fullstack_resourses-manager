@@ -1,25 +1,21 @@
 import { APIError, api } from "encore.dev/api";
-import { SQLDatabase } from "encore.dev/storage/sqldb";
+
+import { db } from "@/database";
+import { IdParams, PaginationParams } from "@/shared/types";
+import { getPagination } from "@/shared/utils";
 
 import {
   BirdOutput,
-  PaginatedBirdsOutput,
+  PaginatedBirdsList,
   SearchBirdParams,
-  SearchedBirdOutput,
+  SearchedBirdsList,
 } from "./types";
 import { CreateBirdInput, UpdateBirdInput } from "./validation";
 
-const db = SQLDatabase.named("resource_center");
-
-export const getAll = api(
+export const getBirds = api<PaginationParams, PaginatedBirdsList>(
   { expose: true, auth: true, method: "GET", path: "/birds" },
-  async (params: {
-    page?: number;
-    limit?: number;
-  }): Promise<PaginatedBirdsOutput> => {
-    const page = params.page || 1;
-    const limit = params.limit || 10;
-    const offset = (page - 1) * limit;
+  async (params) => {
+    const { page, limit, offset } = getPagination(params);
 
     const result: BirdOutput[] = [];
 
@@ -39,7 +35,7 @@ export const getAll = api(
     `;
 
     return {
-      birds: result,
+      items: result,
       total: totalCount?.count || 0,
       page,
       limit,
@@ -47,9 +43,9 @@ export const getAll = api(
   }
 );
 
-export const getOne = api(
+export const getBird = api<IdParams, BirdOutput>(
   { expose: true, auth: true, method: "GET", path: "/birds/:id" },
-  async (params: { id: string }): Promise<BirdOutput> => {
+  async (params) => {
     const bird = await db.queryRow`
       SELECT b.*, 
         (SELECT COUNT(*) FROM bird_likes WHERE bird_id = b.id) as likes_count,
@@ -66,9 +62,9 @@ export const getOne = api(
   }
 );
 
-export const search = api(
+export const searchBirds = api<SearchBirdParams, SearchedBirdsList>(
   { expose: true, auth: true, method: "GET", path: "/birds/search" },
-  async (params: SearchBirdParams): Promise<SearchedBirdOutput> => {
+  async (params) => {
     const { query } = params;
 
     if (!query) {
@@ -81,7 +77,7 @@ export const search = api(
         result.push(bird as BirdOutput);
       }
 
-      return { birds: result };
+      return { items: result };
     }
 
     const result = [];
@@ -97,13 +93,13 @@ export const search = api(
       result.push(bird as BirdOutput);
     }
 
-    return { birds: result };
+    return { items: result };
   }
 );
 
-export const create = api(
+export const createBird = api<CreateBirdInput, BirdOutput>(
   { expose: true, auth: true, method: "POST", path: "/api/birds" },
-  async (input: CreateBirdInput): Promise<BirdOutput> => {
+  async (input) => {
     const bird = await db.queryRow`
       INSERT INTO birds (
         scientific_name, 
@@ -124,9 +120,9 @@ export const create = api(
   }
 );
 
-export const update = api(
+export const updateBird = api<UpdateBirdInput & IdParams, BirdOutput>(
   { expose: true, auth: true, method: "PUT", path: "/api/birds/:id" },
-  async (input: UpdateBirdInput): Promise<BirdOutput> => {
+  async (input) => {
     const existingBird = await db.queryRow`
       SELECT * FROM birds WHERE id = ${input.id}
     `;

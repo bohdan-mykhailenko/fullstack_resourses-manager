@@ -1,3 +1,5 @@
+import { IdParams, PaginatedList, UserIdParams } from "@/shared/types";
+
 export interface BirdOutput {
   id: string;
   scientificName: string;
@@ -10,17 +12,27 @@ export interface BirdOutput {
   updatedAt?: Date;
 }
 
-export interface SearchedBirdOutput {
-  birds: BirdOutput[];
+export interface SearchedBirdsList {
+  items: BirdOutput[];
 }
 
-export interface PaginatedBirdsOutput {
-  birds: BirdOutput[];
-  total: number;
-  page: number;
-  limit: number;
-}
+export interface PaginatedBirdsList extends PaginatedList<BirdOutput> {}
 
 export interface SearchBirdParams {
   query?: string;
 }
+
+export interface ToggleLikeParams extends IdParams, UserIdParams {}
+
+export interface ToggleLikeResponse {
+  liked: boolean;
+}
+
+export interface CommentOutput extends IdParams {
+  content: string;
+  created_at: Date;
+  first_name: string;
+  last_name: string;
+}
+
+export interface CommentsList extends PaginatedList<CommentOutput> {}

@@ -1,11 +1,12 @@
 /// <reference types="vitest" />
+import { resolve } from "path";
 import { defineConfig } from "vite";
-import path from "path";
 
 export default defineConfig({
   resolve: {
     alias: {
-      "~encore": path.resolve(__dirname, "./encore.gen"),
+      "~encore": resolve(__dirname, "./encore.gen"),
+      "@": resolve(__dirname, "./"),
     },
   },
 });

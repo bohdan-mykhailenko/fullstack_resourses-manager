@@ -1,14 +1,13 @@
 import bcrypt from "bcrypt";
 import { APIError, api } from "encore.dev/api";
 import { secret } from "encore.dev/config";
-import { SQLDatabase } from "encore.dev/storage/sqldb";
 import jwt from "jsonwebtoken";
+
+import { db } from "@/database";
 
 import { generateTokens } from "./lib";
 import { UserOutput } from "./types";
 import { SignInInput, SignUpInput } from "./validation";
-
-const db = new SQLDatabase("resource_center", { migrations: "./migrations" });
 
 const jwtSecret = secret("JWT_SECRET")();
 
