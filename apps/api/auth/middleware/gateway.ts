@@ -3,7 +3,7 @@ import { authHandler } from "encore.dev/auth";
 import { secret } from "encore.dev/config";
 import jwt from "jsonwebtoken";
 
-import { AuthData, AuthParams } from "./types";
+import { AuthData, AuthParams } from "./interfaces";
 
 const jwtSecret = secret("JWT_SECRET")();
 

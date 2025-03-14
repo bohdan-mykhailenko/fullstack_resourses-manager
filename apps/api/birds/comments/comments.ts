@@ -1,10 +1,10 @@
 import { api } from "encore.dev/api";
 
 import { db } from "@/database";
-import { IdParams, PaginationParams, UserIdParams } from "@/shared/types";
+import { IdParams, PaginationParams, UserIdParams } from "@/shared/interfaces";
 import { getPagination } from "@/shared/utils";
 
-import { CommentOutput, CommentsList } from "./types";
+import { CommentOutput, CommentsList } from "./interfaces";
 import { AddCommentInput } from "./validation";
 
 export const addComment = api<

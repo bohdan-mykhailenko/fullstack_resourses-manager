@@ -1,7 +1,7 @@
 import { APIError, api } from "encore.dev/api";
 
 import { db } from "@/database";
-import { IdParams, PaginationParams } from "@/shared/types";
+import { IdParams, PaginationParams } from "@/shared/interfaces";
 import { getPagination } from "@/shared/utils";
 
 import {
@@ -9,7 +9,7 @@ import {
   PaginatedBirdsList,
   SearchBirdParams,
   SearchedBirdsList,
-} from "./types";
+} from "./interfaces";
 import { CreateBirdInput, UpdateBirdInput } from "./validation";
 
 export const getBirds = api<PaginationParams, PaginatedBirdsList>(

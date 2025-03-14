@@ -5,8 +5,8 @@ import jwt from "jsonwebtoken";
 
 import { db } from "@/database";
 
+import { UserOutput } from "./interfaces";
 import { generateTokens } from "./lib";
-import { UserOutput } from "./types";
 import { SignInInput, SignUpInput } from "./validation";
 
 const jwtSecret = secret("JWT_SECRET")();

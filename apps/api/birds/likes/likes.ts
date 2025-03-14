@@ -2,7 +2,7 @@ import { api } from "encore.dev/api";
 
 import { db } from "@/database";
 
-import { ToggleLikeParams, ToggleLikeResponse } from "./types";
+import { ToggleLikeParams, ToggleLikeResponse } from "./interfaces";
 
 export const toggleLike = api<ToggleLikeParams, ToggleLikeResponse>(
   { expose: true, auth: true, method: "POST", path: "/birds/:id/like" },

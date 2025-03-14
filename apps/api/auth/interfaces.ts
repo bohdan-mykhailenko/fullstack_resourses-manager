@@ -1,5 +1,3 @@
-import { Header } from "encore.dev/api";
-
 export interface UserOutput {
   firstName: string;
   lastName: string;
@@ -10,12 +8,4 @@ export interface UserOutput {
 
 export interface FindUserInput {
   id: number;
-}
-
-export interface AuthParams {
-  authorization: Header<"Authorization">;
-}
-
-export interface AuthData {
-  userID: string;
 }

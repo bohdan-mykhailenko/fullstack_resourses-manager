@@ -13,7 +13,3 @@ export interface UpdateBirdInput {
   description?: string & (MinLen<2> & MaxLen<300>);
   imageUrl?: string & (MinLen<2> & MaxLen<512>);
 }
-
-export interface AddCommentInput {
-  content: string & (MinLen<2> & MaxLen<300>);
-}

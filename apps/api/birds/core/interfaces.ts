@@ -1,4 +1,4 @@
-import { IdParams, PaginatedList, UserIdParams } from "@/shared/types";
+import { IdParams, PaginatedList, UserIdParams } from "@/shared/interfaces";
 
 export interface BirdOutput {
   id: string;
@@ -21,18 +21,3 @@ export interface PaginatedBirdsList extends PaginatedList<BirdOutput> {}
 export interface SearchBirdParams {
   query?: string;
 }
-
-export interface ToggleLikeParams extends IdParams, UserIdParams {}
-
-export interface ToggleLikeResponse {
-  liked: boolean;
-}
-
-export interface CommentOutput extends IdParams {
-  content: string;
-  created_at: Date;
-  first_name: string;
-  last_name: string;
-}
-
-export interface CommentsList extends PaginatedList<CommentOutput> {}

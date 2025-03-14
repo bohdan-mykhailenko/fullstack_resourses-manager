@@ -1,7 +1,7 @@
 import { APIError, api } from "encore.dev/api";
 import { secret } from "encore.dev/config";
 
-import { AdminInput, AdminOutput } from "./types";
+import { AdminInput, AdminOutput } from "./interfaces";
 
 const adminPassword = secret("ADMIN_PASSWORD")();
 

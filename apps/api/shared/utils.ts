@@ -1,4 +1,4 @@
-import { PaginationParams } from "./types";
+import { PaginationParams } from "./interfaces";
 
 interface PaginationResult {
   page: number;
