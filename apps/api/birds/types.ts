@@ -2,12 +2,16 @@ export interface BirdOutput {
   id: string;
   scientificName: string;
   commonName: string;
-  description?: string;
-  imageUrl?: string;
+  description: string;
+  imageUrl: string;
   likesCount?: number;
   commentsCount?: number;
   createdAt: Date;
   updatedAt?: Date;
+}
+
+export interface SearchedBirdOutput {
+  birds: BirdOutput[];
 }
 
 export interface PaginatedBirdsOutput {
@@ -17,22 +21,6 @@ export interface PaginatedBirdsOutput {
   limit: number;
 }
 
-export interface CreateBirdInput {
-  scientificName: string;
-  commonName: string;
-  description?: string;
-  imageUrl?: string;
-}
-
-export interface UpdateBirdInput {
-  scientificName?: string;
-  commonName?: string;
-  description?: string;
-  imageUrl?: string;
-}
-
 export interface SearchBirdParams {
   query?: string;
-  scientificName?: string;
-  commonName?: string;
 }

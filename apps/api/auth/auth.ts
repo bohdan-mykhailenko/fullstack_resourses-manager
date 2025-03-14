@@ -8,7 +8,7 @@ import { generateTokens } from "./lib";
 import { UserOutput } from "./types";
 import { SignInInput, SignUpInput } from "./validation";
 
-const db = new SQLDatabase("users", { migrations: "./migrations" });
+const db = new SQLDatabase("resource_center", { migrations: "./migrations" });
 
 const jwtSecret = secret("JWT_SECRET")();
 
