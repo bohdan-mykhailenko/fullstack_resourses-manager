@@ -4,7 +4,7 @@ import { db } from "@/database";
 
 import { ToggleLikeParams, ToggleLikeResponse } from "./interfaces";
 
-export const toggleLike = api<ToggleLikeParams, ToggleLikeResponse>(
+export const toggle = api<ToggleLikeParams, ToggleLikeResponse>(
   { expose: true, auth: true, method: "POST", path: "/birds/:id/like" },
   async (params) => {
     const existingLike = await db.queryRow`
@@ -17,6 +17,7 @@ export const toggleLike = api<ToggleLikeParams, ToggleLikeResponse>(
         DELETE FROM bird_likes 
         WHERE bird_id = ${params.id} AND user_id = ${params.userId}
       `;
+
       return { liked: false };
     }
 
@@ -24,6 +25,7 @@ export const toggleLike = api<ToggleLikeParams, ToggleLikeResponse>(
       INSERT INTO bird_likes (bird_id, user_id)
       VALUES (${params.id}, ${params.userId})
     `;
+
     return { liked: true };
   }
 );

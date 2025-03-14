@@ -5,7 +5,3 @@ export interface UserOutput {
   accessToken: string;
   refreshToken: string;
 }
-
-export interface FindUserInput {
-  id: number;
-}

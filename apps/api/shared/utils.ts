@@ -1,3 +1,5 @@
+import { SQLDatabase } from "encore.dev/storage/sqldb";
+
 import { PaginationParams } from "./interfaces";
 
 interface PaginationResult {
@@ -14,3 +16,16 @@ export const getPagination = ({
   limit,
   offset: (page - 1) * limit,
 });
+
+export const processDbList = async <T>(
+  query: ReturnType<typeof SQLDatabase.prototype.query>,
+  transform?: (item: any) => T
+): Promise<T[]> => {
+  const results: T[] = [];
+
+  for await (const item of query) {
+    results.push(transform ? transform(item) : (item as T));
+  }
+
+  return results;
+};

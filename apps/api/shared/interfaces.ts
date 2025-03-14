@@ -3,7 +3,7 @@ export interface IdParams {
 }
 
 export interface UserIdParams {
-  userId: string;
+  userId: number;
 }
 
 export interface PaginationParams {

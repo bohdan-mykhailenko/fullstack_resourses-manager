@@ -6,10 +6,10 @@ import jwt from "jsonwebtoken";
 import { db } from "@/database";
 
 import { UserOutput } from "./interfaces";
-import { generateTokens } from "./lib";
+import { generateTokens } from "./utils";
 import { SignInInput, SignUpInput } from "./validation";
 
-const jwtSecret = secret("JWT_SECRET")();
+const JWT_SECRET = secret("JWT_SECRET")();
 
 export const signUp = api(
   { expose: true, auth: false, method: "POST", path: "/sign-up" },
@@ -69,7 +69,7 @@ export const signIn = api(
   }
 );
 
-export const refreshToken = api(
+export const refresh = api(
   { expose: true, auth: false, method: "POST", path: "/refresh-token" },
   async (input: { refreshToken: string }) => {
     const { refreshToken } = input;
@@ -77,7 +77,7 @@ export const refreshToken = api(
     let payload;
 
     try {
-      payload = jwt.verify(refreshToken, jwtSecret);
+      payload = jwt.verify(refreshToken, JWT_SECRET);
     } catch (err) {
       throw APIError.unauthenticated("Invalid refresh token");
     }

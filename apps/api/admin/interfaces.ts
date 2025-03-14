@@ -1,7 +1,8 @@
-export type AdminInput = {
+export interface AdminInput {
   password: string;
-};
+}
 
-export type AdminOutput = {
+export interface AdminOutput {
   message: string;
-};
+  token: string;
+}

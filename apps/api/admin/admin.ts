@@ -1,19 +1,28 @@
 import { APIError, api } from "encore.dev/api";
 import { secret } from "encore.dev/config";
+import jwt from "jsonwebtoken";
 
 import { AdminInput, AdminOutput } from "./interfaces";
 
-const adminPassword = secret("ADMIN_PASSWORD")();
+const ADMIN_PASSWORD = secret("ADMIN_PASSWORD")();
+const ADMIN_JWT_SECRET = secret("ADMIN_JWT_SECRET")();
 
-export const verify = api(
-  { expose: true, auth: false, method: "POST", path: "/verify" },
-  async (input: AdminInput): Promise<AdminOutput> => {
-    const { password } = input;
+const ADMIN_TOKEN_EXPIRY = "8h";
 
-    if (password !== adminPassword) {
+export const authenticate = api<AdminInput, AdminOutput>(
+  { expose: true, auth: false, method: "POST", path: "/admin/auth" },
+  async (input) => {
+    if (input.password !== ADMIN_PASSWORD) {
       throw APIError.unauthenticated("Invalid admin password");
     }
 
-    return { message: "You are verified as an admin" };
+    const token = jwt.sign({ type: "admin" }, ADMIN_JWT_SECRET, {
+      expiresIn: ADMIN_TOKEN_EXPIRY,
+    });
+
+    return {
+      message: "Admin authenticated successfully",
+      token,
+    };
   }
 );

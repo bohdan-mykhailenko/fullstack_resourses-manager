@@ -2,7 +2,7 @@ import { APIError, api } from "encore.dev/api";
 
 import { db } from "@/database";
 import { IdParams, PaginationParams } from "@/shared/interfaces";
-import { getPagination } from "@/shared/utils";
+import { getPagination, processDbList } from "@/shared/utils";
 
 import {
   BirdOutput,
@@ -12,38 +12,7 @@ import {
 } from "./interfaces";
 import { CreateBirdInput, UpdateBirdInput } from "./validation";
 
-export const getBirds = api<PaginationParams, PaginatedBirdsList>(
-  { expose: true, auth: true, method: "GET", path: "/birds" },
-  async (params) => {
-    const { page, limit, offset } = getPagination(params);
-
-    const result: BirdOutput[] = [];
-
-    for await (const bird of db.query`
-      SELECT b.*, 
-        (SELECT COUNT(*) FROM bird_likes WHERE bird_id = b.id) as likes_count,
-        (SELECT COUNT(*) FROM bird_comments WHERE bird_id = b.id) as comments_count
-      FROM birds b
-      ORDER BY b.created_at DESC
-      LIMIT ${limit} OFFSET ${offset}
-    `) {
-      result.push(bird as BirdOutput);
-    }
-
-    const totalCount = await db.queryRow`
-      SELECT COUNT(*) as count FROM birds
-    `;
-
-    return {
-      items: result,
-      total: totalCount?.count || 0,
-      page,
-      limit,
-    };
-  }
-);
-
-export const getBird = api<IdParams, BirdOutput>(
+export const getOne = api<IdParams, BirdOutput>(
   { expose: true, auth: true, method: "GET", path: "/birds/:id" },
   async (params) => {
     const bird = await db.queryRow`
@@ -62,43 +31,68 @@ export const getBird = api<IdParams, BirdOutput>(
   }
 );
 
-export const searchBirds = api<SearchBirdParams, SearchedBirdsList>(
+export const getList = api<PaginationParams, PaginatedBirdsList>(
+  { expose: true, auth: true, method: "GET", path: "/birds" },
+  async (params) => {
+    const { page, limit, offset } = getPagination(params);
+
+    const result = await processDbList<BirdOutput>(
+      db.query`
+        SELECT b.*, 
+          (SELECT COUNT(*) FROM bird_likes WHERE bird_id = b.id) as likes_count,
+          (SELECT COUNT(*) FROM bird_comments WHERE bird_id = b.id) as comments_count
+        FROM birds b
+        ORDER BY b.created_at DESC
+        LIMIT ${limit} OFFSET ${offset}
+      `
+    );
+
+    const totalCount = await db.queryRow`
+      SELECT COUNT(*) as count FROM birds
+    `;
+
+    return {
+      items: result,
+      total: totalCount?.count || 0,
+      page,
+      limit,
+    };
+  }
+);
+
+export const search = api<SearchBirdParams, SearchedBirdsList>(
   { expose: true, auth: true, method: "GET", path: "/birds/search" },
   async (params) => {
     const { query } = params;
 
     if (!query) {
-      const result: BirdOutput[] = [];
-
-      for await (const bird of db.query`
-        SELECT * FROM birds
-        ORDER BY created_at DESC
-      `) {
-        result.push(bird as BirdOutput);
-      }
+      const result = await processDbList<BirdOutput>(
+        db.query`
+          SELECT * FROM birds
+          ORDER BY created_at DESC
+        `
+      );
 
       return { items: result };
     }
 
-    const result = [];
-
-    for await (const bird of db.query`
+    const result = await processDbList<BirdOutput>(
+      db.query`
         SELECT * FROM birds 
         WHERE 
           scientific_name ILIKE ${`%${query}%`} OR 
           common_name ILIKE ${`%${query}%`} OR 
           description ILIKE ${`%${query}%`}
         ORDER BY created_at DESC
-      `) {
-      result.push(bird as BirdOutput);
-    }
+      `
+    );
 
     return { items: result };
   }
 );
 
-export const createBird = api<CreateBirdInput, BirdOutput>(
-  { expose: true, auth: true, method: "POST", path: "/api/birds" },
+export const create = api<CreateBirdInput, BirdOutput>(
+  { expose: true, auth: true, method: "POST", path: "/birds" },
   async (input) => {
     const bird = await db.queryRow`
       INSERT INTO birds (
@@ -120,8 +114,8 @@ export const createBird = api<CreateBirdInput, BirdOutput>(
   }
 );
 
-export const updateBird = api<UpdateBirdInput & IdParams, BirdOutput>(
-  { expose: true, auth: true, method: "PUT", path: "/api/birds/:id" },
+export const update = api<UpdateBirdInput & IdParams, BirdOutput>(
+  { expose: true, auth: true, method: "PUT", path: "/birds/:id" },
   async (input) => {
     const existingBird = await db.queryRow`
       SELECT * FROM birds WHERE id = ${input.id}
