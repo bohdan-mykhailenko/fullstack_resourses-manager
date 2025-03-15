@@ -29,3 +29,9 @@ export const processDbList = async <T>(
 
   return results;
 };
+
+// todo
+// test endpoints
+// move to planes/tanks?
+// build client api/reuse types
+// intgrate client api with client app
