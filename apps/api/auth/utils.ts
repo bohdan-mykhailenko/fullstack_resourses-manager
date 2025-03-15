@@ -1,4 +1,5 @@
 import { secret } from "encore.dev/config";
+
 import jwt from "jsonwebtoken";
 
 import { UserIdParams } from "@/shared/interfaces";

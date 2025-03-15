@@ -1,6 +1,7 @@
 import { APIError } from "encore.dev/api";
 import { authHandler } from "encore.dev/auth";
 import { secret } from "encore.dev/config";
+
 import jwt from "jsonwebtoken";
 
 import {

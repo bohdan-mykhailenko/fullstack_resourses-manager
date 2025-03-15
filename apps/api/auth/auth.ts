@@ -1,6 +1,7 @@
-import bcrypt from "bcrypt";
 import { APIError, api } from "encore.dev/api";
 import { secret } from "encore.dev/config";
+
+import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
 import { db } from "@/database";

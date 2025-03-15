@@ -1,3 +1,3 @@
 import { Service } from "encore.dev/service";
 
-export default new Service("birds");
+export default new Service("animalshelters");

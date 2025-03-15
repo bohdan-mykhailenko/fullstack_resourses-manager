@@ -6,30 +6,34 @@ CREATE TABLE users (
   password VARCHAR(255) NOT NULL
 );
 
-CREATE TABLE birds (
+CREATE TABLE shelters (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  scientific_name VARCHAR(255) NOT NULL,
-  common_name VARCHAR(255) NOT NULL,
+  name VARCHAR(255) NOT NULL,
   description TEXT,
   image_url VARCHAR(512),
+  website_url VARCHAR(512),
+  address VARCHAR(512),
+  phone VARCHAR(255),
+  email VARCHAR(255),
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ
 );
 
-CREATE TABLE bird_comments (
+CREATE TABLE shelter_feedbacks (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    bird_id UUID NOT NULL REFERENCES birds(id) ON DELETE CASCADE,
+    shelter_id UUID NOT NULL REFERENCES shelters(id) ON DELETE CASCADE,
     user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     content TEXT NOT NULL,
     created_at TIMESTAMPTZ DEFAULT NOW(),
     updated_at TIMESTAMPTZ,
-    parent_id UUID REFERENCES bird_comments(id) ON DELETE CASCADE
+    parent_id UUID REFERENCES shelter_feedbacks(id) ON DELETE CASCADE
 );
 
-CREATE TABLE bird_likes (
+CREATE TABLE shelter_ratings (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    bird_id UUID NOT NULL REFERENCES birds(id) ON DELETE CASCADE,
+    shelter_id UUID NOT NULL REFERENCES shelters(id) ON DELETE CASCADE,
     user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    rating INTEGER NOT NULL CHECK (rating >= 1 AND rating <= 10),
     created_at TIMESTAMPTZ DEFAULT NOW(),
-    UNIQUE(bird_id, user_id)
+    UNIQUE(shelter_id, user_id)
 );

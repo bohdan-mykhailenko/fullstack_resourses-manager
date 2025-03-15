@@ -1,5 +1,5 @@
-CREATE INDEX idx_bird_comments_bird_id ON bird_comments(bird_id);
-CREATE INDEX idx_bird_comments_user_id ON bird_comments(user_id);
+CREATE INDEX idx_shelter_feedbacks_shelter_id ON shelter_feedbacks(shelter_id);
+CREATE INDEX idx_shelter_feedbacks_user_id ON shelter_feedbacks(user_id);
 
-CREATE INDEX idx_bird_likes_bird_id ON bird_likes(bird_id);
-CREATE INDEX idx_bird_likes_user_id ON bird_likes(user_id);
+CREATE INDEX idx_shelter_ratings_shelter_id ON shelter_ratings(shelter_id);
+CREATE INDEX idx_shelter_ratings_user_id ON shelter_ratings(user_id);
