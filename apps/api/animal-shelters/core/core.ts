@@ -2,7 +2,6 @@ import { APIError, api } from "encore.dev/api";
 
 import { db } from "@/database";
 import { IdParams, PaginationParams } from "@/shared/interfaces";
-import { TAGS } from "@/shared/tags";
 import { getPagination, processDbList } from "@/shared/utils";
 
 import {
@@ -22,7 +21,7 @@ export const getOne = api<IdParams, AnimalShelterOutput>(
     auth: true,
     method: "GET",
     path: "/shelters/:id",
-    tags: [TAGS.SHELTERS],
+    tags: ["shelters"],
   },
   async (params) => {
     const animalshelter = await db.queryRow`
@@ -47,7 +46,7 @@ export const getList = api<PaginationParams, PaginatedAnimalSheltersList>(
     auth: true,
     method: "GET",
     path: "/shelters",
-    tags: [TAGS.SHELTERS],
+    tags: ["shelters"],
   },
   async (params) => {
     const { page, limit, offset } = getPagination(params);
@@ -85,7 +84,7 @@ export const search = api<
     auth: true,
     method: "GET",
     path: "/shelters/search",
-    tags: [TAGS.SHELTERS],
+    tags: ["shelters"],
   },
   async (params) => {
     const { query } = params;
@@ -121,7 +120,7 @@ export const create = api<CreateAnimalShelterInput, AnimalShelterOutput>(
     auth: true,
     method: "POST",
     path: "/shelters",
-    tags: [TAGS.SHELTERS, TAGS.ADMIN],
+    tags: ["shelters", "admin"],
   },
   async (input) => {
     const animalshelter = await db.queryRow`
@@ -159,7 +158,7 @@ export const update = api<
     auth: true,
     method: "PUT",
     path: "/shelters/:id",
-    tags: [TAGS.SHELTERS, TAGS.ADMIN],
+    tags: ["shelters", "admin"],
   },
   async (input) => {
     const existingAnimalShelter = await db.queryRow`
@@ -195,7 +194,7 @@ export const remove = api<IdParams, void>(
     auth: true,
     method: "DELETE",
     path: "/shelters/:id",
-    tags: [TAGS.SHELTERS, TAGS.ADMIN],
+    tags: ["shelters", "admin"],
   },
   async (params) => {
     db.query`DELETE FROM shelters WHERE id = ${params.id}`;

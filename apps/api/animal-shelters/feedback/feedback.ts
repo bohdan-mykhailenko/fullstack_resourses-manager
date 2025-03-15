@@ -2,7 +2,6 @@ import { api } from "encore.dev/api";
 
 import { db } from "@/database";
 import { IdParams, PaginationParams, UserIdParams } from "@/shared/interfaces";
-import { TAGS } from "@/shared/tags";
 import { getPagination, processDbList } from "@/shared/utils";
 
 import { FeedbackOutput, FeedbacksList } from "./interfaces";
@@ -17,7 +16,7 @@ export const add = api<
     auth: true,
     method: "POST",
     path: "/shelters/:id/feedbacks",
-    tags: [TAGS.FEEDBACKS],
+    tags: ["shelters", "feedbacks"],
   },
   async (params) => {
     const feedback = await db.queryRow`
@@ -36,7 +35,7 @@ export const getList = api<PaginationParams & IdParams, FeedbacksList>(
     auth: true,
     method: "GET",
     path: "/shelters/:id/feedbacks",
-    tags: [TAGS.FEEDBACKS, TAGS.ADMIN],
+    tags: ["shelters", "feedbacks", "admin"],
   },
   async (params) => {
     const { page, limit, offset } = getPagination(params);

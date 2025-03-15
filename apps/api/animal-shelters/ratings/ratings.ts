@@ -12,6 +12,7 @@ export const rate = api<RateInput & IdParams & UserIdParams, RatingOutput>(
     auth: true,
     method: "POST",
     path: "/shelters/:id/ratings",
+    tags: ["shelters", "ratings"],
   },
   async (params) => {
     const existingRating = await db.queryRow`

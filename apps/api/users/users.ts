@@ -6,7 +6,7 @@ import jwt from "jsonwebtoken";
 
 import { db } from "@/database";
 
-import { UserOutput } from "./interfaces";
+import { UserJWTPayload, UserOutput } from "./interfaces";
 import { generateTokens } from "./utils";
 import { SignInInput, SignUpInput } from "./validation";
 
@@ -33,7 +33,7 @@ export const signUp = api(
     `;
 
     if (!user || !user.id) {
-      throw new Error("Failed to retrieve user ID after sign-up");
+      throw APIError.internal("Failed to retrieve user ID after sign-up");
     }
 
     const { accessToken, refreshToken } = generateTokens(user?.id);
@@ -79,11 +79,11 @@ export const refresh = api(
 
     try {
       payload = jwt.verify(refreshToken, JWT_SECRET);
-    } catch (err) {
+    } catch {
       throw APIError.unauthenticated("Invalid refresh token");
     }
 
-    const { userId } = payload as { userId: string };
+    const { userId } = payload as UserJWTPayload;
 
     const { accessToken } = generateTokens(Number(userId));
 

@@ -16,7 +16,7 @@ const routes = [
   },
 ];
 
-const APP_NAME = "Birds";
+const APP_NAME = "AnimalShelter  s";
 // TODO
 https://encore.dev/docs/ts/cli/client-generation#generating-a-client
 

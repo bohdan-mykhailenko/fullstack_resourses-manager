@@ -1,8 +1,9 @@
 import { APIError, api } from "encore.dev/api";
 import { secret } from "encore.dev/config";
+
 import jwt from "jsonwebtoken";
 
-import { AdminInput, AdminOutput } from "./interfaces";
+import { AdminInput, AdminJWTPayload, AdminOutput } from "./interfaces";
 
 const ADMIN_PASSWORD = secret("ADMIN_PASSWORD")();
 const ADMIN_JWT_SECRET = secret("ADMIN_JWT_SECRET")();
@@ -16,12 +17,16 @@ export const authenticate = api<AdminInput, AdminOutput>(
       throw APIError.unauthenticated("Invalid admin password");
     }
 
-    const token = jwt.sign({ type: "admin" }, ADMIN_JWT_SECRET, {
-      expiresIn: ADMIN_TOKEN_EXPIRY,
-    });
+    const token = jwt.sign(
+      { type: "admin" } satisfies AdminJWTPayload,
+      ADMIN_JWT_SECRET,
+      {
+        expiresIn: ADMIN_TOKEN_EXPIRY,
+      }
+    );
 
     return {
-      message: "Admin authenticated successfully",
+      message: "Authenticated successfully as admin",
       token,
     };
   }
